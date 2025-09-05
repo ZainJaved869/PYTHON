@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -11,6 +12,16 @@ PHONE_NUMBER_ID = "771929146005620"
 VERIFY_TOKEN = "Zain123"
 
 WHATSAPP_API_URL = f"https://graph.facebook.com/v19.0/{PHONE_NUMBER_ID}/messages"
+
+# ----------------------------
+# 🏠 Home Route
+# ----------------------------
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "status": "running",
+        "message": "✅ WhatsApp Flask API is live on Replit!"
+    })
 
 # ----------------------------
 # ✅ Webhook Verification
@@ -85,7 +96,7 @@ def send_welcome_message(to):
             "parameters": [
                 {
                     "type": "text",
-                    "text": "Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us."
+                    "text": "Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for testing with us."
                 }
             ]
         }
@@ -93,7 +104,8 @@ def send_welcome_message(to):
     return send_template(to, "welcome_message", components)
 
 # ----------------------------
-# 🚀 Run Flask
+# 🚀 Run Flask (for Replit)
 # ----------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
